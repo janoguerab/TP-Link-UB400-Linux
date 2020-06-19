@@ -1,0 +1,38 @@
+From 14fe7d7fc135e0a14f6d2d0846d7d25e1f35d3e8 Mon Sep 17 00:00:00 2001
+From: Sergey Kondakov <virtuousfox@gmail.com>
+Date: Mon, 19 Aug 2019 19:31:16 +0500
+Subject: [PATCH] Enablement of HCI_QUIRK_BROKEN_STORED_LINK_KEY quirk for
+ another fake CSR dongle with bcdDevice=88.91 as workaround for bug#60824
+
+---
+ drivers/bluetooth/btusb.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 1c633c3..0a4e95e 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -1591,7 +1591,8 @@ static int btusb_setup_csr(struct hci_dev *hdev)
+ 
+ 	/* Detect controllers which aren't real CSR ones. */
+ 	if (le16_to_cpu(rp->manufacturer) != 10 ||
+-	    le16_to_cpu(rp->lmp_subver) == 0x0c5c) {
++	    le16_to_cpu(rp->lmp_subver) == 0x0811 ||
++	    le16_to_cpu(rp->lmp_subver) == 0x0c5c) {
+ 		/* Clear the reset quirk since this is not an actual
+ 		 * early Bluetooth 1.1 device from CSR.
+ 		 */
+@@ -3229,7 +3230,9 @@ static int btusb_probe(struct usb_interface *intf,
+ 			set_bit(HCI_QUIRK_RESET_ON_CLOSE, &hdev->quirks);
+ 
+ 		/* Fake CSR devices with broken commands */
+-		if (bcdDevice <= 0x100 || bcdDevice == 0x134)
++		if (bcdDevice <= 0x100 ||
++		    bcdDevice == 0x134 ||
++		    bcdDevice == 0x8891)
+ 			hdev->setup = btusb_setup_csr;
+ 
+ 		set_bit(HCI_QUIRK_SIMULTANEOUS_DISCOVERY, &hdev->quirks);
+-- 
+2.22.0
+
