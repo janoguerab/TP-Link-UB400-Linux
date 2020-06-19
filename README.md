@@ -20,7 +20,7 @@ Make a build folder in your home directory to save the source files in it.
 $ mkdir ~/build
 
 ```
-Next, go to [kernel.org](https://www.kernel.org) and download the respective kernel source file (tarball). Also download the patch for the btusb module from this link. Change to the build folder and extract the kernel source:
+Next, go to [kernel.org](https://www.kernel.org) and download the respective kernel source file (tarball). Also download the patch for the btusb module from this [link](https://github.com/janoguerab/TP-Link-UB400-Linux/blob/master/btusb-Enablement-of-HCI_QUIRK_BROKEN_STORED_LINK_KEY-quirk.patch). Change to the build folder and extract the kernel source:
 
 ```
 $ cd ~/build
